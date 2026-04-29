@@ -81,13 +81,14 @@ class LID_Barcode_Sheet
     }
 
     /**
-     * Generate a CODE 128A barcode as an inline base64 PNG image tag.
+     * Generate a CODE 128 barcode as an inline base64 PNG image tag.
+     * Uses auto subset selection so lowercase venue slugs encode cleanly.
      */
     public function generate_barcode(string $data): string
     {
         $barcode = new \Com\Tecnick\Barcode\Barcode();
         $bobj = $barcode->getBarcodeObj(
-            'C128A',
+            'C128',
             $data,
             -4,
             50,
@@ -162,6 +163,20 @@ class LID_Barcode_Sheet
         .sheet-header p {
             color: #646970;
             font-size: 13px;
+        }
+
+        /* Organizer note */
+        .organizer-note {
+            background: #fff8e5;
+            border: 1px solid #f0c75e;
+            border-left: 4px solid #dba617;
+            padding: 14px 18px;
+            margin: 0 auto 32px;
+            max-width: 720px;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #604b1a;
         }
 
         /* Sections */
@@ -259,6 +274,13 @@ class LID_Barcode_Sheet
             .sheet-header h1 {
                 font-size: 20pt;
             }
+            .organizer-note {
+                background: #fff;
+                border: 1px solid #555;
+                border-left-width: 4px;
+                color: #000;
+                margin-bottom: 16px;
+            }
             .section {
                 border-radius: 0;
                 box-shadow: none;
@@ -285,13 +307,19 @@ class LID_Barcode_Sheet
 <body>
 
     <div class="controls no-print">
-        <button onclick="window.print()">Print this sheet</button>
+        <button onclick="window.print()">Print this page</button>
     </div>
 
     <div class="sheet-header">
         <h1>Lifestyle Innovation Day <?= $year ?></h1>
         <p>Barcode Reference Sheet &mdash; Generated <?= $generated ?></p>
     </div>
+
+    <aside class="organizer-note">
+        <strong>Note to event organizer:</strong>
+        Configure handheld scanners to read <strong>Code 128</strong> (CODE128, auto subset).
+        Other Code 128 variants (e.g. 128A or 128B only) will not decode every barcode on this sheet.
+    </aside>
 
     <!-- ENTRANCE -->
     <section class="section entrance">
