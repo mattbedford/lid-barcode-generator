@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MsiCheckTest.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2015 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,6 +16,9 @@
 
 namespace Test\Linear;
 
+use PHPUnit\Framework\TestCase;
+use Test\TestUtil;
+
 /**
  * Barcode class test
  *
@@ -22,33 +26,32 @@ namespace Test\Linear;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2015 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
-class MsiCheckTest extends \PHPUnit_Framework_TestCase
+class MsiCheckTest extends TestUtil
 {
-    protected $obj = null;
-
-    public function setUp()
+    protected function getTestObject()
     {
-        //$this->markTestSkipped(); // skip this test
-        $this->obj = new \Com\Tecnick\Barcode\Barcode;
+        return new \Com\Tecnick\Barcode\Barcode();
     }
 
     public function testGetGrid()
     {
-        $bobj = $this->obj->getBarcodeObj('MSI+', '0123456789ABCDEF');
+        $testObj = $this->getTestObject();
+        $bobj = $testObj->getBarcodeObj('MSI+', '0123456789ABCDEF');
         $grid = $bobj->getGrid();
         $expected = "110100100100100100100100110100100110100100100110110100110100100100110100110100110110100"
-            ."1001101101101101001001001101001001101101001101001101001101101101101001001101101001101101101101"
-            ."001101101101101001001001101001\n";
+            . "1001101101101101001001001101001001101101001101001101001101101101101001001101101001101101101101"
+            . "001101101101101001001001101001\n";
         $this->assertEquals($expected, $grid);
     }
 
     public function testInvalidInput()
     {
-        $this->setExpectedException('\Com\Tecnick\Barcode\Exception');
-        $this->obj->getBarcodeObj('MSI+', 'GHI');
+        $this->bcExpectException('\Com\Tecnick\Barcode\Exception');
+        $testObj = $this->getTestObject();
+        $testObj->getBarcodeObj('MSI+', 'GHI');
     }
 }

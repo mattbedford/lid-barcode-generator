@@ -1,7 +1,0 @@
-{
-    "name": "dagora/lid-barcode-generator",
-    "description": "WordPress plugin to generate barcode reference sheets for LID event session tracking",
-    "require": {
-        "tecnickcom/tc-lib-barcode": "^1.15"
-    }
-}

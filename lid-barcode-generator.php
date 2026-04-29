@@ -2,7 +2,7 @@
 /**
  * Plugin Name: LID Barcode Generator
  * Description: Generates printable barcode reference sheets for event session tracking. Reads session data from Pods and produces a one-click printable sheet for hostesses.
- * Version: 1.0.0
+ * Version: 2.0.0
  * Author: Dagora
  * Requires PHP: 7.4
  */

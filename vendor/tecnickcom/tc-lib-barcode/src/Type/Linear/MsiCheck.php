@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MsiCheck.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,7 +16,7 @@
 
 namespace Com\Tecnick\Barcode\Type\Linear;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
 
 /**
  * Com\Tecnick\Barcode\Type\Linear\MsiCheck;
@@ -27,7 +28,7 @@ use \Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
@@ -67,9 +68,9 @@ class MsiCheck extends \Com\Tecnick\Barcode\Type\Linear
     /**
      * Calculate the checksum
      *
-     * @param $code (string) code to represent.
+     * @param string $code Code to represent.
      *
-     * @return char checksum.
+     * @return int char checksum.
      */
     protected function getChecksum($code)
     {
@@ -77,7 +78,11 @@ class MsiCheck extends \Com\Tecnick\Barcode\Type\Linear
         $pix = 2;
         $check = 0;
         for ($pos = ($clen - 1); $pos >= 0; --$pos) {
-            $check += (hexdec($code[$pos]) * $pix);
+            $hex = $code[$pos];
+            if (!ctype_xdigit($hex)) {
+                continue;
+            }
+            $check += (hexdec($hex) * $pix);
             ++$pix;
             if ($pix > 7) {
                 $pix = 2;
@@ -95,13 +100,11 @@ class MsiCheck extends \Com\Tecnick\Barcode\Type\Linear
      */
     protected function formatCode()
     {
-        $this->extcode = $this->code.$this->getChecksum($this->code);
+        $this->extcode = $this->code . $this->getChecksum($this->code);
     }
-    
+
     /**
-     * Get the bars array
-     *
-     * @return array
+     * Set the bars array.
      *
      * @throws BarcodeException in case of error
      */
@@ -113,7 +116,7 @@ class MsiCheck extends \Com\Tecnick\Barcode\Type\Linear
         for ($pos = 0; $pos < $clen; ++$pos) {
             $digit = $this->extcode[$pos];
             if (!isset($this->chbar[$digit])) {
-                throw new BarcodeException('Invalid character: chr('.ord($digit).')');
+                throw new BarcodeException('Invalid character: chr(' . ord($digit) . ')');
             }
             $seq .= $this->chbar[$digit];
         }

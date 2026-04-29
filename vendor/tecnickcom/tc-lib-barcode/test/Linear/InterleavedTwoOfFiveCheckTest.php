@@ -1,4 +1,5 @@
 <?php
+
 /**
  * InterleavedTwoOfFiveCheckTest.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2015 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,6 +16,9 @@
 
 namespace Test\Linear;
 
+use PHPUnit\Framework\TestCase;
+use Test\TestUtil;
+
 /**
  * Barcode class test
  *
@@ -22,23 +26,21 @@ namespace Test\Linear;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2015 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
-class InterleavedTwoOfFiveCheckTest extends \PHPUnit_Framework_TestCase
+class InterleavedTwoOfFiveCheckTest extends TestUtil
 {
-    protected $obj = null;
-
-    public function setUp()
+    protected function getTestObject()
     {
-        //$this->markTestSkipped(); // skip this test
-        $this->obj = new \Com\Tecnick\Barcode\Barcode;
+        return new \Com\Tecnick\Barcode\Barcode();
     }
 
     public function testGetGrid()
     {
-        $bobj = $this->obj->getBarcodeObj(
+        $testObj = $this->getTestObject();
+        $bobj = $testObj->getBarcodeObj(
             'I25+',
             '0123456789'
         );
@@ -49,7 +51,8 @@ class InterleavedTwoOfFiveCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidInput()
     {
-        $this->setExpectedException('\Com\Tecnick\Barcode\Exception');
-        $this->obj->getBarcodeObj('I25+', 'GHI');
+        $this->bcExpectException('\Com\Tecnick\Barcode\Exception');
+        $testObj = $this->getTestObject();
+        $testObj->getBarcodeObj('I25+', 'GHI');
     }
 }

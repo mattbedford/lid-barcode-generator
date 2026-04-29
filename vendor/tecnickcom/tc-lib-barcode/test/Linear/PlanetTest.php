@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PlanetTest.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2015 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,6 +16,9 @@
 
 namespace Test\Linear;
 
+use PHPUnit\Framework\TestCase;
+use Test\TestUtil;
+
 /**
  * Barcode class test
  *
@@ -22,28 +26,26 @@ namespace Test\Linear;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2015 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
-class PlanetTest extends \PHPUnit_Framework_TestCase
+class PlanetTest extends TestUtil
 {
-    protected $obj = null;
-
-    public function setUp()
+    protected function getTestObject()
     {
-        //$this->markTestSkipped(); // skip this test
-        $this->obj = new \Com\Tecnick\Barcode\Barcode;
+        return new \Com\Tecnick\Barcode\Barcode();
     }
 
     public function testGetGrid()
     {
-        $bobj = $this->obj->getBarcodeObj('PLANET', '0123456789');
+        $testObj = $this->getTestObject();
+        $bobj = $testObj->getBarcodeObj('PLANET', '0123456789');
         $grid = $bobj->getGrid();
         $expected = "100000101010101010000010100010001010000010100010100010"
-            ."00100010100000101000101010000010100010001000101010001000101\n"
-            ."1010101010101010101010101010101010101010101010101010101010101"
-            ."0101010101010101010101010101010101010101010101010101\n";
+            . "00100010100000101000101010000010100010001000101010001000101\n"
+            . "1010101010101010101010101010101010101010101010101010101010101"
+            . "0101010101010101010101010101010101010101010101010101\n";
         $this->assertEquals($expected, $grid);
     }
 }

@@ -89,10 +89,10 @@ class LID_Barcode_Sheet
         $bobj = $barcode->getBarcodeObj(
             'C128A',
             $data,
-            -3,
-            30,
+            -4,
+            50,
             'black',
-            [0, 0, 0, 0]
+            [4, 10, 4, 10]
         )->setBackgroundColor('white');
 
         return '<img src="data:image/png;base64,'
@@ -200,11 +200,8 @@ class LID_Barcode_Sheet
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid #f0f0f1;
-        }
-        .barcode-row:last-child {
-            border-bottom: none;
+            gap: 24px;
+            padding: 28px 0;
         }
 
         .time-col {
@@ -224,14 +221,11 @@ class LID_Barcode_Sheet
             margin-top: 2px;
         }
         .session-title {
-            font-size: 12px;
-            color: #a7aaad;
+            font-size: 13px;
+            color: #787c82;
             display: block;
-            margin-top: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 300px;
+            margin-top: 4px;
+            line-height: 1.35;
         }
 
         .barcode-col {
@@ -239,18 +233,14 @@ class LID_Barcode_Sheet
             text-align: right;
         }
         .barcode-col img {
-            max-width: 220px;
+            max-width: 300px;
             height: auto;
             display: block;
             margin-left: auto;
-        }
-        .barcode-data {
-            display: block;
-            font-size: 10px;
-            color: #c3c4c7;
-            font-family: 'Courier New', Courier, monospace;
-            margin-top: 3px;
-            text-align: center;
+            padding: 6px;
+            border: 1.5px solid #c0c4c8;
+            border-radius: 4px;
+            background: #fff;
         }
 
         /* Print styles */
@@ -284,9 +274,10 @@ class LID_Barcode_Sheet
             }
             .barcode-row {
                 page-break-inside: avoid;
+                padding: 22px 0;
             }
             .barcode-col img {
-                max-width: 180px;
+                max-width: 260px;
             }
         }
     </style>
@@ -317,7 +308,6 @@ class LID_Barcode_Sheet
                 </div>
                 <div class="barcode-col">
                     <?= $this->generate_barcode($barcode_data) ?>
-                    <span class="barcode-data"><?= esc_html($barcode_data) ?></span>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -332,14 +322,10 @@ class LID_Barcode_Sheet
                 <div class="barcode-row">
                     <div class="time-col">
                         <span class="time"><?= esc_html($session['start']) ?></span>
-                        <?php if ($session['end']): ?>
-                            <span class="window-label">ends <?= esc_html($session['end']) ?></span>
-                        <?php endif; ?>
                         <span class="session-title"><?= esc_html($session['title']) ?></span>
                     </div>
                     <div class="barcode-col">
                         <?= $this->generate_barcode($barcode_data) ?>
-                        <span class="barcode-data"><?= esc_html($barcode_data) ?></span>
                     </div>
                 </div>
             <?php endforeach; ?>
