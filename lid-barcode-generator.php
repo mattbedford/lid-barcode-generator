@@ -4,7 +4,7 @@
  * Description: Generates printable barcode reference sheets for event session tracking. Reads session data from Pods and produces a one-click printable sheet for hostesses.
  * Version: 2.5.0
  * Author: Dagora
- * Requires PHP: 8.2
+ * Requires PHP: 8.0
  */
 
 if (!defined('ABSPATH')) {
