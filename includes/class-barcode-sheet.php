@@ -129,6 +129,8 @@ class LID_Barcode_Sheet
             color: #1d2327;
             padding: 20px;
             line-height: 1.4;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         /* Controls bar */
@@ -294,43 +296,26 @@ class LID_Barcode_Sheet
                 page-break-before: auto;
                 page-break-after: always;
             }
-
-            /* Column flow: each room's rows reflow into 2-3 columns to fit the page */
-            .room-grid {
-                column-width: 240px;
-                column-gap: 28px;
-            }
-
-            /* Stack time/title above barcode and use inline-block as a Safari-safe
-               break-inside guard alongside break-inside: avoid */
             .barcode-row {
-                display: inline-block;
-                width: 100%;
-                break-inside: avoid;
                 page-break-inside: avoid;
-                padding: 10px 0 14px;
-                vertical-align: top;
-            }
-            .barcode-row .time-col,
-            .barcode-row .barcode-col {
-                display: block;
-                text-align: left;
-                flex: none;
+                padding: 18px 12px;
             }
             .barcode-col img {
-                margin: 8px 0 0;
-                max-width: 100%;
+                max-width: 360px;
             }
-            .time {
-                font-size: 14pt;
-            }
-            .entrance .time {
-                font-size: 16pt;
-            }
-            .session-title,
-            .window-label {
-                font-size: 9pt;
-            }
+        }
+
+        /* Zebra striping — shared between screen and print to anchor each row visually */
+        .barcode-row {
+            padding-left: 12px;
+            padding-right: 12px;
+            border-radius: 4px;
+        }
+        .barcode-row:nth-child(even) {
+            background: #f4f5f7;
+        }
+        .entrance .barcode-row:nth-child(even) {
+            background: #fdecec;
         }
     </style>
 </head>
@@ -354,43 +339,39 @@ class LID_Barcode_Sheet
     <!-- ENTRANCE -->
     <section class="section entrance">
         <h2>Entrance</h2>
-        <div class="room-grid">
-            <?php foreach (self::ENTRANCE_WINDOWS as $window): ?>
-                <?php
-                $barcode_data = self::ENTRANCE_SLUG . '-' . $window['start'];
-                $time_display = $window['start'] . ($window['end'] ? ' &ndash; ' . $window['end'] : '+');
-                ?>
-                <div class="barcode-row">
-                    <div class="time-col">
-                        <span class="time"><?= $time_display ?></span>
-                        <span class="window-label"><?= esc_html($window['label']) ?></span>
-                    </div>
-                    <div class="barcode-col">
-                        <?= $this->generate_barcode($barcode_data) ?>
-                    </div>
+        <?php foreach (self::ENTRANCE_WINDOWS as $window): ?>
+            <?php
+            $barcode_data = self::ENTRANCE_SLUG . '-' . $window['start'];
+            $time_display = $window['start'] . ($window['end'] ? ' &ndash; ' . $window['end'] : '+');
+            ?>
+            <div class="barcode-row">
+                <div class="time-col">
+                    <span class="time"><?= $time_display ?></span>
+                    <span class="window-label"><?= esc_html($window['label']) ?></span>
                 </div>
-            <?php endforeach; ?>
-        </div>
+                <div class="barcode-col">
+                    <?= $this->generate_barcode($barcode_data) ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </section>
 
     <!-- ROOM SECTIONS -->
     <?php foreach ($sessions as $venue => $venue_sessions): ?>
         <section class="section room" style="--room-color: <?= self::VENUE_COLORS[$venue] ?>">
             <h2><?= esc_html(self::VENUE_LABELS[$venue]) ?></h2>
-            <div class="room-grid">
-                <?php foreach ($venue_sessions as $session): ?>
-                    <?php $barcode_data = $venue . '-' . $session['start']; ?>
-                    <div class="barcode-row">
-                        <div class="time-col">
-                            <span class="time"><?= esc_html($session['start']) ?></span>
-                            <span class="session-title"><?= esc_html($session['title']) ?></span>
-                        </div>
-                        <div class="barcode-col">
-                            <?= $this->generate_barcode($barcode_data) ?>
-                        </div>
+            <?php foreach ($venue_sessions as $session): ?>
+                <?php $barcode_data = $venue . '-' . $session['start']; ?>
+                <div class="barcode-row">
+                    <div class="time-col">
+                        <span class="time"><?= esc_html($session['start']) ?></span>
+                        <span class="session-title"><?= esc_html($session['title']) ?></span>
                     </div>
-                <?php endforeach; ?>
-            </div>
+                    <div class="barcode-col">
+                        <?= $this->generate_barcode($barcode_data) ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </section>
     <?php endforeach; ?>
 
